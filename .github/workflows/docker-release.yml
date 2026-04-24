@@ -57,6 +57,7 @@ jobs:
           name: docker-image-${{ matrix.suffix }}
           path: /tmp/py-xiaozhi-${{ matrix.suffix }}.tar.gz
           retention-days: 1
+          compression-level: 0
 
   release:
     needs: build
