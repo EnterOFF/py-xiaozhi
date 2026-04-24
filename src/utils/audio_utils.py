@@ -163,7 +163,7 @@ def select_audio_device(
     elif system == "darwin":
         host_order = ["core audio"]
     else:
-        host_order = ["alsa", "jack", "oss"]  # 多数 Linux 的 PortAudio 只有 ALSA
+        host_order = ["pulse", "pipewire", "alsa", "jack", "oss"]  # PulseAudio/PipeWire 优先，兼容容器环境
 
     # Linux 才默认启用 name hints；其它平台默认关闭（可通过参数打开）
     if allow_name_hints is None:
