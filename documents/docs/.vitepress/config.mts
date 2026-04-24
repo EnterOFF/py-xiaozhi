@@ -16,7 +16,7 @@ export default defineConfig({
           { text: '系统依赖安装', link: '/guide/系统依赖安装' },
           { text: '配置说明', link: '/guide/配置说明' },
           { text: '语音交互模式说明', link: '/guide/语音交互模式说明' },
-          { text: '快捷键说明', link: '/guide/快捷键说明.md'},
+          { text: '快捷键说明', link: '/guide/快捷键说明.md' },
           { text: '回声消除', link: '/guide/回声消除' },
           { text: '语音唤醒', link: '/guide/语音唤醒' },
           { text: '设备激活流程', link: '/guide/设备激活流程' },
@@ -50,6 +50,7 @@ export default defineConfig({
           { text: '计时器 (Timer)', link: '/mcp/timer' }
         ]
       },
+      { text: 'HTTP API', link: '/api/' },
       { text: '团队', link: '/about/team' },
       { text: '贡献指南', link: '/contributing' },
       { text: '赞助', link: '/sponsors/' }
@@ -84,6 +85,8 @@ export default defineConfig({
       '/contributing': [],
       // 系统架构页面不显示侧边栏
       '/architecture/': [],
+      // HTTP API 页面不显示侧边栏
+      '/api/': [],
       // 团队页面不显示侧边栏
       '/about/team': []
     },
@@ -94,7 +97,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [
-        tailwindcss()
+      tailwindcss()
     ]
   }
 })
