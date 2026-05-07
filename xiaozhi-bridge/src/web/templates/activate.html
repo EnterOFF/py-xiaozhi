@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Device - Xiaozhi Bridge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .code-display {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .code-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .code {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            letter-spacing: 5px;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px dashed #667eea;
+            display: inline-block;
+            min-width: 200px;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .instructions a {
+            color: #2196F3;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .instructions a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #155724;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #721c24;
+        }
+        
+        .auto-refresh {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Device Activation</h1>
+        <p class="subtitle">Activate your ESP32 emulator</p>
+        
+        {% if success %}
+        <div class="code-display">
+            <div class="code-label">Your Activation Code</div>
+            <div class="code">{{ user_code }}</div>
+        </div>
+        
+        <div class="instructions">
+            <strong>Follow these steps to activate:</strong>
+            <ol>
+                <li>Open <a href="https://xiaozhi.me/" target="_blank">xiaozhi.me</a> in your browser</li>
+                <li>Log in to your account (or create one)</li>
+                <li>Navigate to device activation</li>
+                <li>Enter the code: <strong>{{ user_code }}</strong></li>
+                <li>Wait for confirmation</li>
+            </ol>
+        </div>
+        
+        <form action="/api/v1/activate/poll" method="POST">
+            <button type="submit" class="btn">Check Activation Status</button>
+        </form>
+        
+        <div class="auto-refresh">
+            <p>The page will refresh automatically when activation is complete.</p>
+            <div class="spinner"></div>
+        </div>
+        
+        {% else %}
+        <div class="error-box">
+            <strong>Failed to start activation</strong><br>
+            Please try again or check the logs for details.
+        </div>
+        
+        <form action="/activate" method="GET">
+            <button type="submit" class="btn">Try Again</button>
+        </form>
+        {% endif %}
+        
+        <a href="/" class="btn btn-secondary" style="margin-top: 20px;">
+            ← Back to Status
+        </a>
+    </div>
+    
+    {% if success %}
+    <script>
+        // Auto-poll for activation status every 5 seconds
+        setInterval(async () => {
+            try {
+                const response = await fetch('/api/v1/activate/status');
+                const data = await response.json();
+                
+                if (data.activated) {
+                    window.location.href = '/';
+                }
+            } catch (e) {
+                console.error('Error checking status:', e);
+            }
+        }, 5000);
+    </script>
+    {% endif %}
+</body>
+</html>
