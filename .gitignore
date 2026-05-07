@@ -49,10 +49,6 @@ env/
 coverage/
 htmlcov/
 
-# Docker
-Dockerfile
-docker-compose.yml
-
 # OS
 .DS_Store
 Thumbs.db
