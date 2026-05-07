@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Activated - Xiaozhi Bridge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #28a745;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .success-icon {
+            font-size: 5em;
+            margin: 30px 0;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-family: monospace;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .next-steps {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: left;
+        }
+        
+        .next-steps h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+        
+        .next-steps code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Device Activated!</h1>
+        <p class="subtitle">Your ESP32 emulator is ready to use</p>
+        
+        <div class="info-card">
+            <div class="info-item">
+                <span class="info-label">MAC Address</span>
+                <span class="info-value">{{ status.mac_address }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Serial Number</span>
+                <span class="info-value">{{ status.serial_number }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Connection</span>
+                <span class="info-value">{{ "Connected" if status.connected else "Disconnected" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Protocol</span>
+                <span class="info-value">{{ status.protocol|upper }}</span>
+            </div>
+        </div>
+        
+        {% if not status.connected %}
+        <form action="/api/v1/activate/poll" method="POST">
+            <button type="submit" class="btn">Connect to Xiaozhi</button>
+        </form>
+        {% endif %}
+        
+        <div class="next-steps">
+            <h3>🚀 Next Steps</h3>
+            <p style="color: #555; line-height: 1.6;">Configure SillyTavern or your preferred client:</p>
+            <ul style="color: #555; line-height: 1.8; margin-left: 20px; margin-top: 10px;">
+                <li>API Endpoint: <code>http://localhost:8000/v1</code></li>
+                <li>Model Name: <code>xiaozhi-ai</code></li>
+                <li>API Key: <code>any-value</code> (not used)</li>
+            </ul>
+        </div>
+        
+        <a href="/" class="btn btn-secondary">
+            ← Back to Dashboard
+        </a>
+    </div>
+</body>
+</html>
