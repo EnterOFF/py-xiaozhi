@@ -283,6 +283,8 @@ MIT License - See LICENSE file for details.
 
 This project is for educational purposes only. Use at your own risk. Not affiliated with or endorsed by Xiaozhi/tenclass.net.
 
+**Note:** This project was created with assistance from Qwen Coder.
+
 ## Support
 
 - Issues: GitHub Issues
