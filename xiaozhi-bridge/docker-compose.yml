@@ -32,12 +32,13 @@ services:
     image: redis:7-alpine
     container_name: xiaozhi-redis
     restart: unless-stopped
-    volumes:
-      - redis-data:/data
+    #volumes:
+      #- redis-data:/data
     networks:
       - xiaozhi-network
     profiles:
       - with-redis
+    command: redis-server --save "" --appendonly no
 
   # Optional: Nginx reverse proxy for production (can be removed if not needed)
   nginx:
